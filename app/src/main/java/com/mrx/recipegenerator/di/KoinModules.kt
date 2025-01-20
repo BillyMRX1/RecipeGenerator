@@ -11,7 +11,7 @@ import com.mrx.recipegenerator.core.domain.repository.HistoryRepositoryImpl
 import com.mrx.recipegenerator.core.domain.usecase.AddHistoryUseCase
 import com.mrx.recipegenerator.core.domain.usecase.DeleteHistoryUseCase
 import com.mrx.recipegenerator.core.domain.usecase.GetHistoriesUseCase
-import com.mrx.recipegenerator.core.domain.usecase.GetHistoryBasedIdUseCase
+import com.mrx.recipegenerator.core.domain.usecase.GetHistoryByIdUseCase
 import com.mrx.recipegenerator.viewmodel.HistoryDetailViewModel
 import com.mrx.recipegenerator.viewmodel.HistoryViewModel
 import com.mrx.recipegenerator.viewmodel.MainViewModel
@@ -53,7 +53,7 @@ val provideUseCaseModule = module {
     singleOf(::AddHistoryUseCase)
     singleOf(::DeleteHistoryUseCase)
     singleOf(::GetHistoriesUseCase)
-    singleOf(::GetHistoryBasedIdUseCase)
+    singleOf(::GetHistoryByIdUseCase)
 }
 
 val provideViewModelModule = module {
