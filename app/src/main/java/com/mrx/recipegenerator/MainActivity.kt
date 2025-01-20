@@ -4,23 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import com.mrx.recipegenerator.ui.screen.MainScreen
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.mrx.recipegenerator.navigation.NavGraph
 import com.mrx.recipegenerator.ui.theme.RecipeGeneratorTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            navController = rememberNavController()
             RecipeGeneratorTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    MainScreen()
-                }
+                NavGraph(navController)
             }
         }
     }

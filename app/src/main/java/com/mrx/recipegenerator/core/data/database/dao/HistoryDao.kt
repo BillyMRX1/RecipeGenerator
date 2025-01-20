@@ -16,4 +16,7 @@ interface HistoryDao {
 
     @Query("DELETE FROM history_table WHERE id = :id")
     fun deleteHistory(id: Int): Int
+
+    @Query("SELECT * FROM history_table WHERE id = :id")
+    fun getHistoryById(id: Int): Flow<History>
 }

@@ -11,4 +11,5 @@ class HistoryLocalDataSourceImpl(private val dao: HistoryDao) : HistoryLocalData
 
     override suspend fun deleteHistory(id: Int): Boolean = dao.deleteHistory(id) > 0
 
+    override suspend fun getHistoryById(id: Int): Flow<History> = dao.getHistoryById(id)
 }

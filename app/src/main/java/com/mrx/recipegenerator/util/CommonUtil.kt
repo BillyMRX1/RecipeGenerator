@@ -9,6 +9,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import java.io.InputStream
@@ -39,7 +40,7 @@ object CommonUtil {
         }
     }
 
-    fun parseMarkdown(text: String): List<@Composable () -> Unit> {
+    fun parseMarkdown(text: String, color: Color): List<@Composable () -> Unit> {
         val parsedComponents = mutableListOf<@Composable () -> Unit>()
 
         val lines = text.split("\n")
@@ -50,6 +51,7 @@ object CommonUtil {
                     parsedComponents.add {
                         Text(
                             text = line.removePrefix("# "),
+                            color = color,
                             fontWeight = FontWeight.Bold,
                             style = androidx.compose.ui.text.TextStyle(
                                 fontSize = 24.sp
@@ -57,27 +59,32 @@ object CommonUtil {
                         )
                     }
                 }
+
                 line.contains("**") -> {
                     parsedComponents.add {
                         val content = line.substringAfter("**").substringBeforeLast("**")
                         Text(
                             text = content,
+                            color = color,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
+
                 line.contains("*") -> {
                     parsedComponents.add {
                         val content = line.substringAfter("*").substringBeforeLast("*")
                         Text(
                             text = content,
+                            color = color,
                             style = androidx.compose.ui.text.TextStyle(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
                         )
                     }
                 }
+
                 else -> {
                     parsedComponents.add {
-                        Text(text = line)
+                        Text(text = line, color = color)
                     }
                 }
             }

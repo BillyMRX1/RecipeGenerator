@@ -10,4 +10,6 @@ class HistoryRepositoryImpl(private val dataSource: HistoryLocalDataSource) : Hi
     override suspend fun getHistories(): Flow<List<History>> = dataSource.getHistories()
 
     override suspend fun deleteHistory(id: Int): Boolean = dataSource.deleteHistory(id)
+
+    override suspend fun getHistoryById(id: Int): Flow<History> = dataSource.getHistoryById(id)
 }

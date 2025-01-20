@@ -7,4 +7,5 @@ interface HistoryRepository {
     suspend fun addHistory(history: History): Boolean
     suspend fun getHistories(): Flow<List<History>>
     suspend fun deleteHistory(id: Int): Boolean
+    suspend fun getHistoryById(id: Int): Flow<History>
 }
