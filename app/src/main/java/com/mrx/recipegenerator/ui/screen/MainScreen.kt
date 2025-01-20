@@ -16,10 +16,15 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -43,7 +48,6 @@ import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.mrx.recipegenerator.ui.component.MarkdownViewer
 import com.mrx.recipegenerator.util.CommonUtil.copyToClipboard
-import com.mrx.recipegenerator.util.CommonUtil.getBitmapFromUri
 import com.mrx.recipegenerator.viewmodel.MainViewModel
 import com.mrx.recipegenerator.viewmodel.UiState
 import org.koin.androidx.compose.koinViewModel
@@ -107,8 +111,27 @@ fun MainScreen() {
         }
     }
 
+    fun resetState() {
+        prompt = ""
+        result = ""
+        selectedImages = Uri.EMPTY
+        cameraUri = Uri.EMPTY
+        mainViewModel.resetUiState()
+    }
+
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Recipe Generator") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text("Recipe Generator") },
+                actions = {
+                    IconButton(onClick = {
+                        Toast.makeText(context, "History clicked!", Toast.LENGTH_SHORT).show()
+                    }) {
+                        Icon(Icons.Filled.DateRange, contentDescription = "History")
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             val isEnabled = prompt.isNotEmpty() || selectedImages != Uri.EMPTY
             FloatingActionButton(
@@ -116,10 +139,8 @@ fun MainScreen() {
                     if (isEnabled) {
                         if (imageMode) {
                             mainViewModel.sendPromptedImage(
-                                getBitmapFromUri(
-                                    context,
-                                    selectedImages
-                                )
+                                context,
+                                selectedImages
                             )
                         } else {
                             mainViewModel.sendPrompt(prompt)
@@ -135,7 +156,10 @@ fun MainScreen() {
         Column(modifier = Modifier.padding(innerPadding)) {
             if (!imageMode) {
                 Button(
-                    onClick = { imageMode = true },
+                    onClick = {
+                        imageMode = true
+                        resetState()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -152,7 +176,10 @@ fun MainScreen() {
                 )
             } else {
                 Button(
-                    onClick = { imageMode = false },
+                    onClick = {
+                        imageMode = false
+                        resetState()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
