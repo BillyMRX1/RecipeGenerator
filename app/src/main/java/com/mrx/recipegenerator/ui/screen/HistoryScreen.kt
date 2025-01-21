@@ -83,7 +83,7 @@ fun HistoryScreen(navController: NavHostController) {
                 }
 
                 is UiState.Error -> {
-                    Text(uiState.errorMessage)
+                    Text(uiState.errorMessage, modifier = Modifier.align(Alignment.Center))
                 }
 
                 else -> {

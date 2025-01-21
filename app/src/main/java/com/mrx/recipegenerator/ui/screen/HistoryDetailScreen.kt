@@ -13,9 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,10 +36,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.mrx.recipegenerator.navigation.Screen
 import com.mrx.recipegenerator.ui.component.MarkdownViewer
-import com.mrx.recipegenerator.util.CommonUtil.copyToClipboard
 import com.mrx.recipegenerator.viewmodel.HistoryDetailViewModel
+import com.mrx.recipegenerator.viewmodel.HistoryDetailViewModel.Companion.DELETE_HISTORY
 import com.mrx.recipegenerator.viewmodel.UiState
 import org.koin.androidx.compose.koinViewModel
 
@@ -81,9 +79,19 @@ fun HistoryDetailScreen(
                 actions = {
                     IconButton(onClick = {
                         history?.let {
+                            historyId?.let { it1 -> viewModel.deleteHistoryById(it1) }
+                        }
+                    }) {
+                        Icon(Icons.Filled.Delete, contentDescription = "Delete History")
+                    }
+                    IconButton(onClick = {
+                        history?.let {
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
-                                putExtra(Intent.EXTRA_TEXT, "Prompt: ${it.prompt}\n\nOutput: ${it.output}")
+                                putExtra(
+                                    Intent.EXTRA_TEXT,
+                                    "Prompt: ${it.prompt}\n\nOutput: ${it.output}"
+                                )
                                 putExtra(Intent.EXTRA_SUBJECT, "Recipe from Recipe Generator")
                             }
                             context.startActivity(Intent.createChooser(shareIntent, "Share via"))
@@ -144,6 +152,12 @@ fun HistoryDetailScreen(
 
                 is UiState.Error -> {
                     Text(uiState.errorMessage)
+                }
+
+                is UiState.Custom -> {
+                    when (uiState.state) {
+                        DELETE_HISTORY -> navController.popBackStack()
+                    }
                 }
 
                 else -> {
